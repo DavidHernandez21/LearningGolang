@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package todo;
+
+option go_package = "src/github.com/DavidHernandez21/justForfunc/protoBuf_basics/todo";
+
+
+message Task {
+    string text = 1;
+    bool done = 2;
+}
