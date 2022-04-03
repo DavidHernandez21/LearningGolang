@@ -28,10 +28,26 @@ type PrintJob struct {
 	Format    string `json:"format"`
 }
 
-func handleWriteStringError(err error, c *gin.Context) {
+func handleWriteStringErrorGin(err error, c *gin.Context) {
 
 	log.Printf("InvoiceGenerator: %s", err.Error())
-	c.JSON(500, gin.H{"error": "Unable to connect to PrinterService"})
+	c.JSON(500, gin.H{"error": "Internal server error"})
+}
+
+func joinStrings(grow int, words...string) (string, error){
+	var sb strings.Builder
+	sb.Grow(grow)
+
+	for _, s := range words{
+
+		_, err := sb.WriteString(s)
+
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return sb.String(), nil
 }
 
 func createPrintJob(invoiceId int, URL string) error {
@@ -71,39 +87,14 @@ func main() {
 		rand.Seed(time.Now().UnixNano())
 		iv.InvoiceId = rand.Intn(1000)
 		log.Printf("InvoiceGenerator: created invoice #%v", iv.InvoiceId)
-		var printerServiceAddress strings.Builder
-		printerServiceAddress.Grow(90) // we will be writing 90 bytes
-		_, err := printerServiceAddress.WriteString("http://")
+
+		printerServiceAddress, err := joinStrings(90, "http://", *host, ":", "8080", "/print-jobs")
 		if err != nil {
-			handleWriteStringError(err, c)
+			handleWriteStringErrorGin(err, c)
 			return
 		}
 
-		_, err = printerServiceAddress.WriteString(*host)
-		if err != nil {
-			handleWriteStringError(err, c)
-			return
-		}
-
-		_, err = printerServiceAddress.WriteString(":")
-		if err != nil {
-			handleWriteStringError(err, c)
-			return
-		}
-
-		_, err = printerServiceAddress.WriteString("8080")
-		if err != nil {
-			handleWriteStringError(err, c)
-			return
-		}
-
-		_, err = printerServiceAddress.WriteString("/print-jobs")
-		if err != nil {
-			handleWriteStringError(err, c)
-			return
-		}
-
-		err = createPrintJob(iv.InvoiceId, printerServiceAddress.String()) // Ask PrinterService to create a print job
+		err = createPrintJob(iv.InvoiceId, printerServiceAddress) // Ask PrinterService to create a print job
 		if err != nil {
 			log.Printf("PrinterService: %s", err.Error())
 			c.JSON(500, gin.H{"error": "Unable to connect to PrinterService"})
@@ -111,26 +102,14 @@ func main() {
 		c.JSON(200, iv)
 	})
 
-	var bindAddress strings.Builder
-	bindAddress.Grow(90)
-	_, err := bindAddress.WriteString(*host)
-	if err != nil {
-		log.Fatalf("InvoiceGenerator: %s", err.Error())
-		return
-	}
-	_, err = bindAddress.WriteString(":")
+
+	bindAddress, err := joinStrings(90, *host, ":", *port)
 	if err != nil {
 		log.Fatalf("InvoiceGenerator: %s", err.Error())
 		return
 	}
 
-	_, err = bindAddress.WriteString(*port)
-	if err != nil {
-		log.Fatalf("InvoiceGenerator: %s", err.Error())
-		return
-	}
-
-	srv := getserver.NewServer(bindAddress.String(), router)
+	srv := getserver.NewServer(bindAddress, router)
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && errors.Is(err, http.ErrServerClosed) {
