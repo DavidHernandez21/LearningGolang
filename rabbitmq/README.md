@@ -7,3 +7,4 @@ After watching some videos I had the courage to go through Rabbitmq getting star
 For the HAProxy bit I have to give credit to [this](http://throughaglass.io/technology/RabbitMQ-cluster-with-Docker-and-Docker-Compose.html) blog
 and [this](https://github.com/pardahlman/docker-rabbitmq-cluster/blob/master/haproxy.cfg) repo
 
+I also recommend [video](youtube.com/watch?v=ez9kQEhHsnc)
