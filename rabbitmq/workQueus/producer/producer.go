@@ -21,7 +21,7 @@ func joinBuilder(grow int, words ...string) (string, error) {
 
 	// sb.Reset()
 	var sb strings.Builder
-	sb.Grow(90)
+	sb.Grow(grow)
 
 	for _, word := range words {
 		_, err := sb.WriteString(word)
@@ -85,8 +85,9 @@ func loopThroughNotifyReturn(ch *amqp.Channel, mexCount *mexCount, wg *sync.Wait
 
 }
 
+//listens for keyboard interrupt and sends a message to done channel
 func listenForKeyboardInterrupt(done chan struct{}) {
-	quit := make(chan os.Signal)
+	quit := make(chan os.Signal, 1)
 	// kill (no param) default send syscall.SIGTERM
 	// kill -2 is syscall.SIGINT
 	// kill -9 is syscall.SIGKILL but can't be caught, so don't need to add it
@@ -144,9 +145,6 @@ func main() {
 loop:
 	for {
 
-		if err != nil {
-			log.Fatalf("error strings builder: %v", err)
-		}
 		log.Println("publishing message")
 		err = ch.Publish("", q.Name, true, false,
 			amqp.Publishing{
