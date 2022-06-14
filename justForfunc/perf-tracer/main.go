@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"image"
 	"image/color"
 	"image/png"
@@ -19,8 +20,6 @@ const (
 	cpuProfile = "cpu.prof"
 )
 
-var numWorkers int = runtime.NumCPU()
-
 func main() {
 	// uncomment these lines to generate traces into stdout.
 	// trace.Start(os.Stdout)
@@ -28,6 +27,9 @@ func main() {
 	timer := StartTimer("main")
 
 	defer timer()
+
+	numWorkers := flag.Int("workers", runtime.NumCPU(), "number of workers")
+	flag.Parse()
 
 	// log.Println("num of cpu processors", numWorkers)
 
@@ -62,7 +64,8 @@ func main() {
 	defer closeFile(f)
 
 	// img := createCol(width, height)
-	img := createCol(width, height)
+	// img := createCol(width, height)
+	img := createColWorkersBuffered(width, height, *numWorkers)
 
 	if err = png.Encode(f, img); err != nil {
 		log.Fatal(err)
@@ -121,7 +124,7 @@ func createCol(width, height int) image.Image {
 }
 
 // createWorkers creates numWorkers workers and uses a channel to pass each pixel.
-func createWorkers(width, height int) image.Image {
+func createWorkers(width, height, numWorkers int) image.Image {
 	m := image.NewGray(image.Rect(0, 0, width, height))
 
 	type px struct{ x, y int }
@@ -149,7 +152,7 @@ func createWorkers(width, height int) image.Image {
 }
 
 // createWorkersBuffered creates numWorkers workers and uses a buffered channel to pass each pixel.
-func createWorkersBuffered(width, height int) image.Image {
+func createWorkersBuffered(width, height, numWorkers int) image.Image {
 	m := image.NewGray(image.Rect(0, 0, width, height))
 
 	type px struct{ x, y int }
@@ -177,7 +180,7 @@ func createWorkersBuffered(width, height int) image.Image {
 }
 
 // createColWorkers creates numWorkers workers and uses a channel to pass each column.
-func createColWorkers(width, height int) image.Image {
+func createColWorkers(width, height, numWorkers int) image.Image {
 	m := image.NewGray(image.Rect(0, 0, width, height))
 
 	c := make(chan int)
@@ -205,7 +208,7 @@ func createColWorkers(width, height int) image.Image {
 }
 
 // createColWorkersBuffered creates numWorkers workers and uses a buffered channel to pass each column.
-func createColWorkersBuffered(width, height int) image.Image {
+func createColWorkersBuffered(width, height, numWorkers int) image.Image {
 	m := image.NewGray(image.Rect(0, 0, width, height))
 
 	c := make(chan int, width)
