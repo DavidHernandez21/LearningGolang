@@ -43,15 +43,6 @@ const (
 var endianness = binary.LittleEndian
 
 func (taskServer) Add(ctx context.Context, text *pb.Text) (task *pb.Task, err error) {
-	task = &pb.Task{
-		Text: text.Text,
-		Done: false,
-	}
-
-	b, err := proto.Marshal(task)
-	if err != nil {
-		return nil, fmt.Errorf("could not encode task: %v", err)
-	}
 
 	f, err := os.OpenFile(dbPath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
@@ -66,6 +57,16 @@ func (taskServer) Add(ctx context.Context, text *pb.Text) (task *pb.Task, err er
 		}
 
 	}()
+
+	task = &pb.Task{
+		Text: text.Text,
+		Done: false,
+	}
+
+	b, err := proto.Marshal(task)
+	if err != nil {
+		return nil, fmt.Errorf("could not encode task: %v", err)
+	}
 
 	if err := binary.Write(f, endianness, length(len(b))); err != nil {
 		return nil, fmt.Errorf("could not encode length of message: %v", err)

@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	const maxWorkers = 0
+	const maxWorkers = 8
 	s := semgroup.NewGroup(context.Background(), maxWorkers)
 
 	visitors := [9]int{1, 1, 1, 1, 2, 2, 1, 1, 2}

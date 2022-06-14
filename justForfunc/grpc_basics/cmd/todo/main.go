@@ -10,6 +10,7 @@ import (
 	pb "src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/justForfunc/grpc_basics/todo"
 
 	grpc "google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
@@ -19,7 +20,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	conn, err := grpc.Dial(":8888", grpc.WithInsecure())
+	// grpc.WithInsecure()
+	conn, err := grpc.Dial(":8888", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "could not connect to backend: %v\n", err)
 		os.Exit(1)
@@ -41,6 +43,11 @@ func main() {
 }
 
 func add(ctx context.Context, client pb.TasksClient, text string) error {
+
+	if text == "" {
+		return fmt.Errorf("no text provided")
+	}
+
 	_, err := client.Add(ctx, &pb.Text{Text: text})
 	if err != nil {
 		return fmt.Errorf("could not add task in the backend: %v", err)
