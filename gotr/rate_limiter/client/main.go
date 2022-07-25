@@ -24,7 +24,7 @@ func main() {
 			i++
 			io.Copy(os.Stdout, resp.Body)
 			errBody = resp.Body.Close()
-			if err != nil {
+			if errBody != nil {
 				logrus.Errorf("Error closing body: %v", errBody)
 			}
 			continue
