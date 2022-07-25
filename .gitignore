@@ -19,3 +19,6 @@
 
 # .env file
 .env
+
+# .erlang.cookie file
+.erlang.cookie

@@ -21,6 +21,7 @@ func PublishQueue(ctx context.Context, ch *amqp.Channel, body, routingKey string
 				// Marking messages as persistent doesn't fully guarantee that a message won't be lost.
 				//Although it tells RabbitMQ to save the message to disk,
 				//there is still a short time window when RabbitMQ has accepted a message and hasn't saved it yet
+				// persistent mex will be lost on non-durable queues!!
 				DeliveryMode: amqp.Persistent,
 				ContentType:  "text/plain",
 				Body:         []byte(body),
@@ -30,16 +31,16 @@ func PublishQueue(ctx context.Context, ch *amqp.Channel, body, routingKey string
 
 }
 
-func PublishExchange(ctx context.Context, ch *amqp.Channel, body, exchange string) error {
+func PublishExchange(ctx context.Context, ch *amqp.Channel, body, exchange, routingKey string) error {
 
 	select {
 	case <-ctx.Done():
 		return ctx.Err()
 	default:
 		err := ch.Publish(
-			exchange, // exchange
-			"",       // routing key
-			false,    // mandatory
+			exchange,   // exchange
+			routingKey, // routing key
+			false,      // mandatory
 			false,
 			amqp.Publishing{
 				// Marking messages as persistent doesn't fully guarantee that a message won't be lost.
