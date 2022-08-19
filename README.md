@@ -10,3 +10,9 @@ In this repo I will put code that I have wrote following tutorials and reading b
     + golangci-lint linters
 - Run the linters
     + golangci-lint -v run // verbose mode
+
+## gitleaks (maybe better using it with pre-commit)
+[docs](https://github.com/zricethezav/gitleaks)
+
+- docker pull zricethezav/gitleaks:latest
+- docker run --rm -it -v $PWD:/path  zricethezav/gitleaks:latest detect --source=path
