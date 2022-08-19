@@ -5,6 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"log"
 	"math/rand"
 	"net"
 	"os"
@@ -26,7 +27,7 @@ var timeout int
 func init() {
 	flag.StringVar(&host, "host", "127.0.0.1", "Host to scan.")
 	flag.StringVar(&ports, "ports", "5400-5500", "Port(s) (e.g. 80, 22-100).")
-	flag.IntVar(&timeout, "timeout", 5, "Timeout in seconds (default is 5).")
+	flag.IntVar(&timeout, "timeout", 10, "Timeout in seconds (default is 5).")
 
 	rand.Seed(time.Now().UnixNano())
 }
@@ -38,7 +39,13 @@ func main() {
 
 	flag.Parse()
 
-	var openPorts []int
+	portsToScan, err := parsePortsToScan(ports)
+	if err != nil {
+		fmt.Printf("Failed to parse ports to scan: %s\n", err)
+		os.Exit(1)
+	}
+
+	openPorts := make([]int, 0, len(portsToScan))
 
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
@@ -48,12 +55,6 @@ func main() {
 		os.Exit(0)
 	}()
 
-	portsToScan, err := parsePortsToScan(ports)
-	if err != nil {
-		fmt.Printf("Failed to parse ports to scan: %s\n", err)
-		os.Exit(1)
-	}
-
 	var semMaxWeight int64 = 100_000
 	var semAcquisitionWeight int64 = 100
 
@@ -61,25 +62,28 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
 	defer cancel()
 
-	for _, port := range portsToScan {
+	for k := range portsToScan {
 		if err := sem.Acquire(ctx, semAcquisitionWeight); err != nil {
-			fmt.Printf("Failed to acquire semaphore (port %d): %v\n", port, err)
+			fmt.Printf("Failed to acquire semaphore (port %d): %v\n", portsToScan[k], err)
 			break
 		}
 
 		go func(port int) {
 			defer sem.Release(semAcquisitionWeight)
 			fmt.Printf("num of active goroutines: %v\n", runtime.NumGoroutine())
-			sleepy(10)
+			sleepy(1)
 			p := scan(host, port)
 			if p != 0 {
 				openPorts = append(openPorts, p)
 			}
-		}(port)
+		}(portsToScan[k])
 	}
 
 	// We block here until done.
-	sem.Acquire(ctx, semMaxWeight)
+	err = sem.Acquire(ctx, semMaxWeight)
+	if err != nil {
+		log.Fatalf("failed to acquire semaphore: %v", err)
+	}
 
 	printResults(openPorts)
 }
@@ -109,7 +113,8 @@ func parsePortsToScan(portsFlag string) ([]int, error) {
 		return nil, fmt.Errorf("port numbers must be greater than 0")
 	}
 
-	var results []int
+	// var results []int
+	results := make([]int, 0, maxPort-minPort+1)
 	for p := minPort; p <= maxPort; p++ {
 		results = append(results, p)
 	}
@@ -135,8 +140,8 @@ func sleepy(max int) {
 func printResults(ports []int) {
 	sort.Ints(ports)
 	fmt.Println("\nResults\n--------------")
-	for _, p := range ports {
-		fmt.Printf("%d - open\n", p)
+	for k := range ports {
+		fmt.Printf("%d - open\n", ports[k])
 	}
 }
 

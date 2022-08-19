@@ -46,7 +46,8 @@ func main() {
 	in := gen(ctx, portsToScan...)
 
 	// fan-out
-	var chans []<-chan scanOp
+	// var chans []<-chan scanOp
+	chans := make([]<-chan scanOp, workers)
 	for i := 0; i < workers; i++ {
 		chans = append(chans, scan(ctx, in))
 	}

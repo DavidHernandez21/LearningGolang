@@ -99,7 +99,10 @@ func (srv *TCPServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	msg := &model.ClientReq{}
-	dec.Decode(msg)
+	err := dec.Decode(msg)
+	if err != nil {
+		srv.log.Debug("Error decoding message", err)
+	}
 	// INFO - pretent we do some work on with the msg
 	time.Sleep(time.Duration(rn.Int63n(5)) * time.Millisecond)
 }

@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net"
 	"os"
@@ -91,7 +90,7 @@ func (taskServer) Add(ctx context.Context, text *pb.Text) (task *pb.Task, err er
 }
 
 func (taskServer) List(ctx context.Context, void *pb.Void) (*pb.TaskList, error) {
-	b, err := ioutil.ReadFile(dbPath)
+	b, err := os.ReadFile(dbPath)
 	if err != nil {
 		return nil, fmt.Errorf("could not read %s: %v", dbPath, err)
 	}

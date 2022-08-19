@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"time"
 
-	log "github.com/mgutz/logxi/v1"
+	"github.com/sirupsen/logrus"
 	"golang.org/x/time/rate"
 )
 
@@ -23,7 +23,7 @@ func main() {
 
 		err := lim.WaitN(context.Background(), n)
 		if err != nil {
-			log.Error("Error: ", err)
+			logrus.Error("Error: ", err)
 		}
 		for j := 0; j < n; j++ {
 			if counter == 10 {
@@ -36,7 +36,7 @@ func main() {
 }
 
 func callExternal() {
-	log.Info("request to external at %v\n", time.Now())
+	logrus.Infof("request to external at %v\n", time.Now())
 	d := time.Duration(rg.Int31n(500)) * time.Millisecond
 	time.Sleep(d)
 }

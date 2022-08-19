@@ -22,6 +22,7 @@ var (
 	s      = rand.NewSource(time.Now().Unix())
 	r      = rand.New(s)
 	logger = log.New("client")
+	// buf    = &bytes.Buffer{}
 )
 
 func submitRequests(url string) {
@@ -43,13 +44,13 @@ func submitRequests(url string) {
 			req.Size = r.Intn(model.ReqDataSize)
 			buf, err := encodeReq(req)
 			if nil != err {
-				logger.Error("JSON encode error:", err)
+				logger.Debug("JSON encode error:", err)
 				break // try again later
 			}
 			// fmt.Println(buf) // send to server
 			resp, err := http.Post(url, "text/json", buf)
 			if nil != err {
-				logger.Error("Post error:", err)
+				logger.Debug("Post error:", err)
 				break // try again later
 			}
 			defer resp.Body.Close()
@@ -60,6 +61,7 @@ func submitRequests(url string) {
 }
 
 func encodeReq(req *model.ClientReq) (io.Reader, error) {
+	// buf.Reset()
 	var buf = &bytes.Buffer{}
 	err := json.NewEncoder(buf).Encode(req)
 	if err != nil {

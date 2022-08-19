@@ -27,7 +27,15 @@ func init() {
 func main() {
 	flag.Parse()
 
-	var openPorts []int
+	// var openPorts []int
+
+	portsToScan, err := parsePortsToScan(ports)
+	if err != nil {
+		fmt.Printf("Failed to parse ports to scan: %s\n", err)
+		os.Exit(1)
+	}
+
+	openPorts := make([]int, 0, len(portsToScan)/2) // initialize with capacity equals to half the number of ports to scan
 
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
@@ -36,12 +44,6 @@ func main() {
 		printResults(openPorts)
 		os.Exit(0)
 	}()
-
-	portsToScan, err := parsePortsToScan(ports)
-	if err != nil {
-		fmt.Printf("Failed to parse ports to scan: %s\n", err)
-		os.Exit(1)
-	}
 
 	portsChan := make(chan int, numWorkers)
 	resultsChan := make(chan int)
@@ -92,7 +94,8 @@ func parsePortsToScan(portsFlag string) ([]int, error) {
 		return nil, fmt.Errorf("port numbers must be greater than 0")
 	}
 
-	var results []int
+	// var results []int
+	results := make([]int, 0, maxPort-minPort+1)
 	for p := minPort; p <= maxPort; p++ {
 		results = append(results, p)
 	}

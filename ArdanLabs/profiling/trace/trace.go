@@ -13,11 +13,17 @@ import (
 	"log"
 	"os"
 	"runtime"
+	"runtime/pprof"
 	"runtime/trace"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
+)
+
+const (
+	memProfile = "mem.prof"
 )
 
 type (
@@ -38,29 +44,79 @@ type (
 	}
 )
 
+func joinBuilder(sb *strings.Builder, words ...string) (string, error) {
+
+	sb.Reset()
+	// sb.Grow(grow)
+
+	for _, word := range words {
+		_, err := sb.WriteString(word)
+
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return sb.String(), nil
+}
+
 func main() {
 	// pprof.StartCPUProfile(os.Stdout)
 	// defer pprof.StopCPUProfile()
 
-	// trace.Start(os.Stdout)
+	// f1, err := os.Create("trace.out")
+	// if err != nil {
+	// 	log.Fatalf("failed to create trace output file: %v", err)
+	// }
+	// defer func() {
+	// 	if err := f1.Close(); err != nil {
+	// 		log.Fatalf("failed to close trace file: %v", err)
+	// 	}
+	// }()
+
+	// if err := trace.Start(f1); err != nil {
+	// 	log.Fatalf("failed to start trace: %v", err)
+	// }
 	// defer trace.Stop()
-	myTimer := StartTimer("actor")
+
+	myTimer := StartTimer("freqProcessors")
 	defer myTimer()
 
+	f1, err := os.Create(memProfile)
+	if err != nil {
+		log.Fatal("could not create memory profile: ", err)
+	}
+	defer f1.Close() // error handling omitted for example
+	// runtime.MemProfile()
+	// runtime.MemProfileRate = 1
+
 	docs := make([]string, 4000)
+	sb := strings.Builder{}
+	sb.Grow(15)
 	for i := range docs {
-		docs[i] = fmt.Sprintf("newsfeed-%.4d.xml", i)
+		doc, err := joinBuilder(&sb, "newsfeed-", strconv.Itoa(i), ".xml")
+		if err != nil {
+			log.Fatalf("failed to join: %v", err)
+		}
+
+		docs[i] = doc
+		// docs[i] = fmt.Sprintf("newsfeed-%.4d.xml", i)
 	}
 
 	topic := "president"
 	// n := freq(topic, docs)
 	// n := freqConcurrent(topic, docs)
 	// n := freqConcurrentSem(topic, docs)
-	// n := freqProcessors(topic, docs)
+	n := freqProcessors(topic, docs)
 	// n := freqProcessorsTasks(topic, docs)
-	n := freqActor(topic, docs)
+	// n := freqActor(topic, docs)
 
 	log.Printf("Searching %d files, found %s %d times.", len(docs), topic, n)
+
+	if err := pprof.Lookup("heap").WriteTo(f1, 0); err != nil {
+		log.Fatal("could not write memory profile: ", err)
+	}
+
 }
 
 func freq(topic string, docs []string) int {
@@ -172,7 +228,6 @@ func freqConcurrentSem(topic string, docs []string) int {
 					atomic.AddInt32(&found, lFound)
 					wg.Done()
 				}()
-
 				file := fmt.Sprintf("%s.xml", doc[:8])
 				f, err := os.OpenFile(file, os.O_RDONLY, 0)
 				if err != nil {
@@ -229,20 +284,35 @@ func freqProcessors(topic string, docs []string) int {
 				wg.Done()
 			}()
 
+			// buffer := bytes.Buffer{}
+			// buffer.Grow(26000)
+
+			sb := strings.Builder{}
+			sb.Grow(10)
 			for doc := range ch {
-				file := fmt.Sprintf("%s.xml", doc[:8])
+				// file := fmt.Sprintf("%s.xml", doc[:8])
+				file, err := joinBuilder(&sb, doc[:8], ".xml")
+				// log.Printf("file: %s", file)
+				if err != nil {
+					log.Fatalf("Joining Builder : ERROR : %v", err)
+				}
 				f, err := os.OpenFile(file, os.O_RDONLY, 0)
 				if err != nil {
 					log.Printf("Opening Document [%s] : ERROR : %v", doc, err)
 					return
 				}
 
+				// _, err = buffer.ReadFrom(f)
+				// if err != nil {
+				// 	log.Fatalf("Buffer Reading Document [%s] : ERROR : %v", file, err)
+				// }
 				data, err := io.ReadAll(f)
-				f.Close()
 				if err != nil {
-					log.Printf("Reading Document [%s] : ERROR : %v", doc, err)
+					log.Printf("io Reading Document [%s] : ERROR : %v", doc, err)
 					return
 				}
+				f.Close()
+				// buffer.Reset()
 
 				var d document
 				if err := xml.Unmarshal(data, &d); err != nil {
@@ -414,12 +484,12 @@ func freqActor(topic string, docs []string) int {
 
 func StartTimer(name string) func() {
 	t := time.Now()
-	fmt.Println(name, "started")
+	log.Println(name, "started")
 
 	return func() {
 		// d := time.Now().Sub(t)
 		d := time.Since(t)
-		fmt.Println(name, "took", d)
+		log.Println(name, "took", d)
 	}
 
 }

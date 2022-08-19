@@ -1,7 +1,7 @@
 package fasthttp_request_perf
 
 import (
-	"io/ioutil"
+	"io"
 	"net"
 	"net/http"
 	"runtime"
@@ -26,7 +26,11 @@ func handleRequest(ctx *fasthttp.RequestCtx) {
 	}
 
 	ctx.SetStatusCode(fasthttp.StatusOK)
-	ctx.Write(args.Peek("q"))
+	_, err := ctx.Write(args.Peek("q"))
+	if err != nil {
+		ctx.Logger().Printf("error while writing response body: %s", err)
+	}
+
 }
 
 func startTcpServer(b *testing.B) *TcpServer {
@@ -95,7 +99,7 @@ func BenchmarkNetHttpClientOverTCPToFastHttpServer(b *testing.B) {
 				b.Fatalf("expected status code %d but got %d", http.StatusOK, resp.StatusCode)
 			}
 			// Read the response body
-			body, err := ioutil.ReadAll(resp.Body)
+			body, err := io.ReadAll(resp.Body)
 			resp.Body.Close()
 			if err != nil {
 				b.Fatalf("error while reading response body: %s", err)

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net"
 	"sync"
@@ -25,7 +25,7 @@ func main() {
 				if err != nil {
 					log.Fatalf("could not dial: %v", err)
 				}
-				bs, err := ioutil.ReadAll(conn)
+				bs, err := io.ReadAll(conn)
 				if err != nil {
 					log.Fatalf("could not read from conn: %v", err)
 				}

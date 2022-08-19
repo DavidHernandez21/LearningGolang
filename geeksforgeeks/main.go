@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"log"
 )
 
 // Calling main
@@ -28,7 +29,10 @@ func main() {
 
 	// Calling ReadFrom method and writing
 	// data into buffer
-	buffer.ReadFrom(pipeReader)
+	_, err := buffer.ReadFrom(pipeReader)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	// Prints the data in buffer
 	fmt.Print(buffer.String())

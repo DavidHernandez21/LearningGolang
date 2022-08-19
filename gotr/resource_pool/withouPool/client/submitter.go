@@ -42,13 +42,13 @@ func submitRequests(url string) {
 			req.Size = r.Intn(model.ReqDataSize)
 			buf, err := encodeReq(req)
 			if nil != err {
-				logger.Error("JSON encode error:", err)
+				logger.Debug("JSON encode error:", err)
 				break // try again later
 			}
 			// fmt.Println(buf) // send to server
 			resp, err := http.Post(url, "text/json", buf)
 			if nil != err {
-				logger.Error("Post error:", err)
+				logger.Debug("Post error:", err)
 				break // try again later
 			}
 			defer resp.Body.Close()

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"math"
 )
 
@@ -39,8 +39,8 @@ type calculator struct {
 
 func (a calculator) areaSum(shapes ...shape) float64 {
 	var sum float64
-	for _, shape := range shapes {
-		sum += shape.area()
+	for i := range shapes {
+		sum += shapes[i].area()
 	}
 	return sum
 }
@@ -50,5 +50,6 @@ func main() {
 	s := square{length: 7}
 	t := triangle{height: 3, base: 7}
 	calc := calculator{}
-	fmt.Println("area sum:", calc.areaSum(c, s, t))
+	const text = "area sum:"
+	log.Println(text, calc.areaSum(c, s, t))
 }

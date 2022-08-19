@@ -108,7 +108,13 @@ func (srv *TCPServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		dec := json.NewDecoder(r.Body)
 		defer r.Body.Close()
 		msg := rp.Alloc()
-		dec.Decode(msg)
+		err := dec.Decode(msg)
+		if err != nil {
+			srv.log.Debug("Error decoding message:", err)
+			rp.Release(msg)
+			return
+		}
+
 		// INFO - pretent we do some work on with the msg
 		time.Sleep(10 * time.Millisecond)
 		rp.Release(msg)

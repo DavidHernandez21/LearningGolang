@@ -64,7 +64,7 @@ func (srv *TCPServer) Start() error {
 	go func() {
 		err = srv.s.ListenAndServe()
 	}()
-	time.Sleep(200 * time.Millisecond)
+	// time.Sleep(200 * time.Millisecond)
 	return err
 }
 
@@ -103,14 +103,21 @@ func (srv *TCPServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	atomic.AddUint64(&srv.numReqs, 1)
 
 	go func() {
-		srv.log.Debug("TCPServer - message from", r.RemoteAddr)
+		// srv.log.Info("TCPServer - message from", r.RemoteAddr)
+		msg := rp.Get()
 		dec := json.NewDecoder(r.Body)
 		defer r.Body.Close()
 
-		msg := rp.Get()
-		dec.Decode(msg)
+		err := dec.Decode(msg)
+		if err != nil {
+			// invalid Read on closed Body ??
+			srv.log.Debug("Error decoding message:", err)
+		}
+		// if msg.ID != 0 {
+		// 	srv.log.Info("TCPServer - message:", msg.ID)
+		// }
 		// INFO - pretent we do some work on with the msg
-		time.Sleep(10 * time.Millisecond)
+		// time.Sleep(10 * time.Millisecond)
 		rp.Put(msg)
 	}()
 

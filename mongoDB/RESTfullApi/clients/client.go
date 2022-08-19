@@ -61,7 +61,7 @@ func DisconnectClient(client *mongo.Client, logger *log.Logger) {
 
 func CtrlCHandler(client *mongo.Client, logger *log.Logger) {
 
-	c := make(chan os.Signal)
+	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		sig := <-c

@@ -4,7 +4,6 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"net"
 	"os"
 	"os/exec"
@@ -42,7 +41,7 @@ type server struct {
 }
 
 func (server) Say(ctx context.Context, text *pb.Text) (*pb.Speech, error) {
-	f, err := ioutil.TempFile("", "")
+	f, err := os.CreateTemp("", "")
 	if err != nil {
 		return nil, fmt.Errorf("could not create tmp file: %v", err)
 	}
@@ -56,7 +55,7 @@ func (server) Say(ctx context.Context, text *pb.Text) (*pb.Speech, error) {
 		return nil, fmt.Errorf("espeak failed: %s", data)
 	}
 
-	data, err := ioutil.ReadFile(f.Name())
+	data, err := os.ReadFile(f.Name())
 	if err != nil {
 		return nil, fmt.Errorf("could not read tmp file: %v", err)
 	}

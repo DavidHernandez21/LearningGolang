@@ -14,14 +14,13 @@ import (
 
 func main() {
 
-	logger := log.New(os.Stdout, "memray ", log.LstdFlags)
+	logger := log.New(os.Stdout, "DF - messenger ", log.LstdFlags)
 
 	router := mux.NewRouter()
 
 	getRouter := router.Methods(http.MethodGet).Subrouter()
 
 	getRouter.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("./static"))))
-	getRouter.Handle("/1", http.StripPrefix("/1", http.FileServer(http.Dir("./static1"))))
 
 	// create a new server
 	server := http.Server{

@@ -13,7 +13,7 @@ import (
 var (
 	rg  = rand.New(rand.NewSource(time.Now().Unix()))
 	r   = rate.Every(2 * time.Second)
-	lim = rate.NewLimiter(r, 3)
+	lim = rate.NewLimiter(r, 4)
 )
 
 func main() {

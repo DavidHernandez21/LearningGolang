@@ -22,10 +22,13 @@ func main() {
 		resp, err := client.Get("http://localhost:8080/api")
 		if err == nil && resp.StatusCode == http.StatusOK {
 			i++
-			io.Copy(os.Stdout, resp.Body)
+			_, err := io.Copy(os.Stdout, resp.Body)
+			if err != nil {
+				logrus.Errorf("Error copying body response: %v\n", err)
+			}
 			errBody = resp.Body.Close()
 			if errBody != nil {
-				logrus.Errorf("Error closing body: %v", errBody)
+				logrus.Errorf("Error closing body: %v\n", errBody)
 			}
 			continue
 		}
@@ -33,7 +36,7 @@ func main() {
 		d := time.Duration(rg.Int31n(500)) * time.Millisecond
 		errBody = resp.Body.Close()
 		if err != nil {
-			logrus.Errorf("Error closing body: %v", errBody)
+			logrus.Errorf("Error closing body: %v\n", errBody)
 		}
 		time.Sleep(d)
 

@@ -83,7 +83,8 @@ func parsePortsToScan(portsFlag string) ([]int, error) {
 		return nil, fmt.Errorf("port numbers must be greater than 0")
 	}
 
-	var results []int
+	// var results []int
+	results := make([]int, 0, maxPort-minPort+1)
 	for p := minPort; p <= maxPort; p++ {
 		results = append(results, p)
 	}

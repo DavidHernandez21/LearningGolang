@@ -46,11 +46,17 @@ func main() {
 	}
 	defer f.Close()
 
+	st, err := f.Stat()
+	if err != nil {
+		log.Fatal(err)
+	}
+	words := make([]string, 0, st.Size()/4)
+
 	scanner := bufio.NewScanner(f)
 	scanner.Split(bufio.ScanWords)
 
-	si := newStringInterner(1000)
-	var words []string
+	si := newStringInterner(int(st.Size() / 4))
+	// var words []string
 	for scanner.Scan() {
 		words = append(words, si.InternBytes(scanner.Bytes())) // intern words
 	}

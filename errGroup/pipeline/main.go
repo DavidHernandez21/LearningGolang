@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/md5"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -46,11 +45,11 @@ func MD5All(ctx context.Context, root string) (map[string][md5.Size]byte, error)
 
 	g.Go(func() error {
 		defer close(paths)
-		return filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		return filepath.WalkDir(root, func(path string, d os.DirEntry, err error) error {
 			if err != nil {
 				return err
 			}
-			if !info.Mode().IsRegular() {
+			if !d.Type().IsRegular() {
 				return nil
 			}
 			select {
@@ -68,7 +67,7 @@ func MD5All(ctx context.Context, root string) (map[string][md5.Size]byte, error)
 	for i := 0; i < numDigesters; i++ {
 		g.Go(func() error {
 			for path := range paths {
-				data, err := ioutil.ReadFile(path)
+				data, err := os.ReadFile(path)
 				// err = fmt.Errorf("error reading file: %s", path)
 				if err != nil {
 					return err
@@ -83,7 +82,10 @@ func MD5All(ctx context.Context, root string) (map[string][md5.Size]byte, error)
 		})
 	}
 	go func() {
-		g.Wait()
+		err := g.Wait()
+		if err != nil {
+			log.Printf("Error waiting error group: %v\n", err)
+		}
 		close(c)
 	}()
 

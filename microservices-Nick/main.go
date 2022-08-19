@@ -78,7 +78,7 @@ func main() {
 	errShutdown := s.Shutdown(ctx)
 
 	if errShutdown != nil {
-		l.Printf("Error while trying to gracefully shutdown server: %v", s)
+		l.Println("Error while trying to gracefully shutdown server")
 		os.Exit(1)
 	}
 }

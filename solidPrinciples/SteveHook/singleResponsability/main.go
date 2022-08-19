@@ -43,16 +43,21 @@ func (o outputter) Text(s shape) string {
 	return fmt.Sprintf("area  of the %s: %f", s.name(), s.area())
 }
 
-func (o outputter) JSON(s shape) string {
-	res := struct {
-		Name string  `json:"shape"`
-		Area float64 `json:"area"`
-	}{
-		Name: s.name(),
-		Area: s.area(),
-	}
+type res struct {
+	Name string  `json:"shape"`
+	Area float64 `json:"area"`
+}
 
-	bs, err := json.Marshal(res)
+func (o outputter) JSON(s shape) string {
+	// res := struct {
+	// 	Name string  `json:"shape"`
+	// 	Area float64 `json:"area"`
+	// }{
+	// 	Name: s.name(),
+	// 	Area: s.area(),
+	// }
+
+	bs, err := json.Marshal(res{Name: s.name(), Area: s.area()})
 	if err != nil {
 		log.Fatal(err)
 	}

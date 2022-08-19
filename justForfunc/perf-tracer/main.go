@@ -41,6 +41,7 @@ func main() {
 	// pprof.StartCPUProfile(f1)
 	// defer closeFile(f1)
 	// defer pprof.StopCPUProfile()
+
 	f1, err := os.Create("trace.out")
 	if err != nil {
 		log.Fatalf("failed to create trace output file: %v", err)

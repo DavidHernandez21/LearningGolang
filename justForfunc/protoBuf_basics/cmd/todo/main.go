@@ -5,7 +5,6 @@ import (
 	"encoding/binary"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strings"
 
@@ -76,7 +75,7 @@ func add(text string) error {
 }
 
 func list() error {
-	b, err := ioutil.ReadFile(dbPath)
+	b, err := os.ReadFile(dbPath)
 	if err != nil {
 		return fmt.Errorf("could not read %s: %v", dbPath, err)
 	}

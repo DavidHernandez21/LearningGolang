@@ -30,7 +30,8 @@ func main() {
 		log.Fatal("You must set your 'MONGODB_URI' environmental variable. See\n\t https://docs.mongodb.com/drivers/go/current/usage-examples/")
 	}
 
-	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
 		panic(err)
@@ -46,7 +47,8 @@ func main() {
 	coll := client.Database("thepolyglotdeveloper").Collection("people")
 	filter := bson.D{primitive.E{Key: "countries", Value: "China"}}
 
-	ctxFullCount, _ := context.WithTimeout(context.Background(), 20*time.Second)
+	ctxFullCount, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
 	estCount, estCountErr := coll.EstimatedDocumentCount(ctxFullCount)
 	count, countErr := coll.CountDocuments(ctxFullCount, filter)
 	// end countDocuments

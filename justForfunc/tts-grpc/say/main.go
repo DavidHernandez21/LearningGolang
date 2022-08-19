@@ -4,11 +4,11 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
 	pb "src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/justForfunc/tts-grpc/api"
 )
@@ -23,7 +23,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	conn, err := grpc.Dial(*backend, grpc.WithInsecure())
+	conn, err := grpc.Dial(*backend, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("could not connect to %s: %v", *backend, err)
 	}
@@ -37,7 +37,7 @@ func main() {
 		log.Fatalf("could not say %s: %v", text.Text, err)
 	}
 
-	if err := ioutil.WriteFile(*output, res.Audio, 0666); err != nil {
+	if err := os.WriteFile(*output, res.Audio, 0666); err != nil {
 		log.Fatalf("could not write to %s: %v", *output, err)
 	}
 

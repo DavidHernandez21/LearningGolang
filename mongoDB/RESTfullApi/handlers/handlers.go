@@ -112,7 +112,10 @@ func (c *GetPersonByNameEndpoint) ServeHTTP(response http.ResponseWriter, reques
 	cursor, err := collection.Find(ctx, bson.D{primitive.E{Key: "firstname", Value: bson.D{primitive.E{Key: "$regex", Value: regexValue}}}})
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{ "message": "` + err.Error() + `" }`))
+		_, err := response.Write([]byte(`{ "message": "` + err.Error() + `" }`))
+		if err != nil {
+			c.Logger.Printf("Error while writing the error response: %v\n", err)
+		}
 
 		return
 	}
@@ -131,7 +134,10 @@ func (c *GetPersonByNameEndpoint) ServeHTTP(response http.ResponseWriter, reques
 	// }
 	// if err := cursor.Err(); err != nil {
 	// 	response.WriteHeader(http.StatusInternalServerError)
-	// 	response.Write([]byte(`{ "message": "` + err.Error() + `" }`))
+	// 	_ , err := response.Write([]byte(`{ "message": "` + err.Error() + `" }`))
+	// if err != nil {
+	// 	c.Logger.Printf("Error while writing the error response: %v\n", err)
+	// }
 	// 	return
 	// }
 
@@ -140,14 +146,20 @@ func (c *GetPersonByNameEndpoint) ServeHTTP(response http.ResponseWriter, reques
 
 	if err1 == data.ErrNotFound {
 		c.Logger.Printf("No Person was found with the name: %v", name)
-		response.Write([]byte(`{ "message": "No Person was found with the name: '` + name + `'" }`))
+		_, err := response.Write([]byte(`{ "message": "No Person was found with the name: '` + name + `'" }`))
+		if err != nil {
+			c.Logger.Printf("Error while writing the error response: %v\n", err)
+		}
 		return
 	}
 
 	if err1 != nil {
 
 		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{ "message": "` + err1.Error() + `" }`))
+		_, err := response.Write([]byte(`{ "message": "` + err1.Error() + `" }`))
+		if err != nil {
+			c.Logger.Printf("Error while writing the error response: %v\n", err)
+		}
 		return
 
 	}
@@ -168,7 +180,11 @@ func (c *GetPersonByIdEndpoint) ServeHTTP(response http.ResponseWriter, request 
 	if errId != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		// http.Error(response, "Internal Error", http.StatusInternalServerError)
-		response.Write([]byte(`{ "message": "` + errId.Error() + `" }`))
+		_, err := response.Write([]byte(`{ "message": "` + errId.Error() + `" }`))
+		if err != nil {
+			c.Logger.Printf("Error while writing the error response: %v\n", err)
+		}
+
 		return
 	}
 
@@ -186,14 +202,20 @@ func (c *GetPersonByIdEndpoint) ServeHTTP(response http.ResponseWriter, request 
 
 	if err == mongo.ErrNoDocuments {
 		c.Logger.Printf("No Person was found with the id: %v", paramsId)
-		response.Write([]byte(`{ "message": "No Person was found with the id: ` + paramsId + `" }`))
+		_, err := response.Write([]byte(`{ "message": "No Person was found with the id: ` + paramsId + `" }`))
+		if err != nil {
+			c.Logger.Printf("Error while writing the error response: %v\n", err)
+		}
 		return
 	}
 
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		// http.Error(response, "Internal Error", http.StatusInternalServerError)
-		response.Write([]byte(`{ "message": "` + err.Error() + `" }`))
+		_, err := response.Write([]byte(`{ "message": "` + err.Error() + `" }`))
+		if err != nil {
+			c.Logger.Printf("Error while writing the error response: %v\n", err)
+		}
 		return
 	}
 	// json.NewEncoder(response).Encode(person)
@@ -203,7 +225,11 @@ func (c *GetPersonByIdEndpoint) ServeHTTP(response http.ResponseWriter, request 
 
 		response.WriteHeader(http.StatusInternalServerError)
 		// http.Error(response, "Internal Error", http.StatusInternalServerError)
-		response.Write([]byte(`{ "message": "` + err1.Error() + `" }`))
+		_, err := response.Write([]byte(`{ "message": "` + err1.Error() + `" }`))
+		if err != nil {
+			c.Logger.Printf("Error while writing the error response: %v\n", err)
+		}
+
 		return
 
 	}
@@ -227,7 +253,10 @@ func (c *GetPeopleEndpoint) ServeHTTP(response http.ResponseWriter, request *htt
 	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{ "message": "` + err.Error() + `" }`))
+		_, err := response.Write([]byte(`{ "message": "` + err.Error() + `" }`))
+		if err != nil {
+			c.Logger.Printf("Error while writing the error response: %v\n", err)
+		}
 
 		return
 	}
@@ -253,7 +282,10 @@ func (c *GetPeopleEndpoint) ServeHTTP(response http.ResponseWriter, request *htt
 	if err2 != nil {
 
 		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{ "message": "` + err2.Error() + `" }`))
+		_, err := response.Write([]byte(`{ "message": "` + err2.Error() + `" }`))
+		if err != nil {
+			c.Logger.Printf("Error while writing the error response: %v\n", err)
+		}
 		return
 
 	}
@@ -307,14 +339,21 @@ func appendPersonFromCursor(cursor *mongo.Cursor, people data.People, ctx contex
 		// 	people = append(people, &person)
 		// }()
 		var person data.Person
-		cursor.Decode(&person)
+		err := cursor.Decode(&person)
+		if err != nil {
+			logger.Printf("Error decoding person: %v", err)
+			continue
+		}
 		people = append(people, &person)
 
 	}
 	// wg.Wait()
 	if err := cursor.Err(); err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{ "message": "` + err.Error() + `" }`))
+		_, err := response.Write([]byte(`{ "message": "` + err.Error() + `" }`))
+		if err != nil {
+			logger.Printf("Error while writing the error response: %v\n", err)
+		}
 		return nil
 	}
 
