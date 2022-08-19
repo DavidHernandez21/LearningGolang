@@ -46,7 +46,7 @@ func main() {
 	// var chans []<-chan scanOp
 	chans := make([]<-chan scanOp, workers)
 	for i := 0; i < workers; i++ {
-		chans = append(chans, scan(done, in))
+		chans[i] = scan(done, in)
 	}
 
 	// for s := range filterOpen(done, merge(done, chans...)) {

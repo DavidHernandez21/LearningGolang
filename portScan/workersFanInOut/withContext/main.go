@@ -11,6 +11,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"golang.org/x/sync/errgroup"
 )
 
 var ports string
@@ -40,7 +42,7 @@ func main() {
 	// done := make(chan struct{})
 	// defer close(done)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	in := gen(ctx, portsToScan...)
@@ -49,17 +51,25 @@ func main() {
 	// var chans []<-chan scanOp
 	chans := make([]<-chan scanOp, workers)
 	for i := 0; i < workers; i++ {
-		chans = append(chans, scan(ctx, in))
+		chans[i] = scan(ctx, in)
 	}
 
 	// for s := range filterOpen(ctx, merge(ctx, chans...)) {
 	// 	fmt.Printf("%#v\n", s)
 	// }
 
-	for s := range filterOpen(ctx, merge(ctx, chans...)) {
+	// for s := range filterOpen(ctx, merge(ctx, chans...)) {
+	// 	fmt.Printf("%#v\n", s)
+	// 	// done <- struct{}{}
+	// 	// return
+	// }
+
+	filterChannel, errChannel := filterOpenErrGroup(ctx, merge(ctx, chans...), workers)
+	for s := range filterChannel {
 		fmt.Printf("%#v\n", s)
-		// done <- struct{}{}
-		// return
+	}
+	for s := range errChannel {
+		fmt.Printf("Error from filtering operation: %#v\n", s)
 	}
 
 	// done chan is closed by the deferred call here
@@ -159,6 +169,7 @@ func filterOpen(ctx context.Context, in <-chan scanOp) <-chan scanOp {
 			default:
 				if scan.open {
 					out <- scan
+
 				}
 			case <-ctx.Done():
 				fmt.Println("stopping goroutine...")
@@ -168,6 +179,44 @@ func filterOpen(ctx context.Context, in <-chan scanOp) <-chan scanOp {
 		}
 	}()
 	return out
+}
+
+func filterOpenErrGroup(ctx context.Context, in <-chan scanOp, numWorkers int) (<-chan scanOp, <-chan error) {
+	out := make(chan scanOp)
+	errs := make(chan error, 1)
+	g, ctx := errgroup.WithContext(ctx)
+
+	for i := 0; i < numWorkers; i++ {
+		g.Go(func() error {
+			for scan := range in {
+				select {
+				default:
+					if scan.open {
+						out <- scan
+
+					}
+				case <-ctx.Done():
+					fmt.Println("stopping goroutine...")
+					// fmt.Printf("filterOpen -- recieved mex from context channel: %v\n", ctx.Err())
+					return ctx.Err()
+				}
+			}
+			return nil
+		})
+	}
+
+	// The only error we are tracking is the context error.
+	go func() {
+		err := g.Wait()
+		if err != nil {
+			errs <- err
+		}
+		close(errs)
+		close(out)
+
+	}()
+
+	return out, errs
 }
 
 func filterErr(ctx context.Context, in <-chan scanOp) <-chan scanOp {
