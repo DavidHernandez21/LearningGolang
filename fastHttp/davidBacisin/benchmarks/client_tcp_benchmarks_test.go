@@ -67,9 +67,13 @@ func (s *TcpServer) Stop(b *testing.B) {
 	s.tcpListener.Close()
 
 	// If the server doesn't stop within a second, warn us
+	delay := time.NewTimer(time.Second)
 	select {
 	case <-s.isRunningChannel:
-	case <-time.After(time.Second):
+		if !delay.Stop() {
+			delay.C = nil
+		}
+	case <-delay.C:
 		b.Fatalf("server failed to stop")
 	}
 }

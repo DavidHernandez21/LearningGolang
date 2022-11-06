@@ -7,14 +7,14 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	myloggy "src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/justForfunc/context/mylog"
+	myloggy "src/github.com/DavidHernandez21/justForfunc/context/mylog"
 	"syscall"
 	"time"
 	// "github.com/campoy/justforfunc/09-context/log.
 )
 
 func main() {
-	port := flag.Int("p", 5450, "port to listen to")
+	port := flag.Int("p", 8080, "port to listen to")
 	flag.Parse()
 	http.HandleFunc("/", myloggy.Decorate(handler))
 	stdlog.Printf("Listening on port %v", *port)
@@ -27,13 +27,17 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	myloggy.Println(ctx, "handler started")
 	defer myloggy.Println(ctx, "handler ended")
 
+	delay := time.NewTimer(1 * time.Second)
 	select {
-	case <-time.After(1 * time.Second):
+	case <-delay.C:
 		fmt.Fprintln(w, "hello")
 	case <-ctx.Done():
 		err := ctx.Err()
 		myloggy.Println(ctx, err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		if !delay.Stop() {
+			delay.C = nil
+		}
 		os.Exit(2)
 
 	}
