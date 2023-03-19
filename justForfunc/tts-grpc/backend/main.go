@@ -13,7 +13,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 
-	pb "src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/justForfunc/tts-grpc/api"
+	pb "src/github.com/DavidHernandez21/justForfunc/tts-grpc/api"
 )
 
 func main() {

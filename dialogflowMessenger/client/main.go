@@ -9,7 +9,7 @@ import (
 	"os/exec"
 	"regexp"
 
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/dialogflowMessenger/tokenGenerator"
+	"src/github.com/DavidHernandez21/dialogflowMessenger/tokenGenerator"
 
 	"github.com/google/uuid"
 )

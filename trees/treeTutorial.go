@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/trees/tree"
+	"src/github.com/DavidHernandez21/trees/tree"
 )
 
 func main() {

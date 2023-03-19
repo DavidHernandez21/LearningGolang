@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/MemStoreProject/io"
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/MemStoreProject/ms"
+	"src/github.com/DavidHernandez21/MemStoreProject/io"
+	"src/github.com/DavidHernandez21/MemStoreProject/ms"
 )
 
 type (

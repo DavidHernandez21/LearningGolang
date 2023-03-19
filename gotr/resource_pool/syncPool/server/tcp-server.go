@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/gotr/resource_pool/syncPool/model"
+	"src/github.com/DavidHernandez21/gotr/resource_pool/syncPool/model"
 	"sync"
 	"sync/atomic"
 	"time"

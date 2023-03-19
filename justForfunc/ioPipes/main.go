@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/justForfunc/ioPipes/imgcat"
+	"src/github.com/DavidHernandez21/justForfunc/ioPipes/imgcat"
 
 	"github.com/pkg/errors"
 )

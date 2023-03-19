@@ -2,7 +2,7 @@ package rp
 
 import (
 	"fmt"
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/gotr/resource_pool/myOwnPool/model"
+	"src/github.com/DavidHernandez21/gotr/resource_pool/myOwnPool/model"
 )
 
 const CR_POOL_SIZE = 300

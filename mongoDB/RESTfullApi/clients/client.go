@@ -8,7 +8,7 @@ import (
 	"syscall"
 	"time"
 
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/timer"
+	"src/github.com/DavidHernandez21/timer"
 
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"

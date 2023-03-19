@@ -9,7 +9,7 @@ import (
 	"net"
 	"os"
 
-	pb "src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/justForfunc/grpc_basics/todo"
+	pb "src/github.com/DavidHernandez21/justForfunc/grpc_basics/todo"
 
 	"golang.org/x/net/context"
 	grpc "google.golang.org/grpc"

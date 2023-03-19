@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	pb "src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/justForfunc/grpc_basics/todo"
+	pb "src/github.com/DavidHernandez21/justForfunc/grpc_basics/todo"
 
 	grpc "google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/microservices-Nick/data"
+	"src/github.com/DavidHernandez21/microservices-Nick/data"
 )
 
 // Products is a http.Handler

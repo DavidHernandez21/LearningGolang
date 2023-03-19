@@ -1,8 +1,8 @@
 package provider
 
 import (
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/dependencyInjection/cache"
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/dependencyInjection/database"
+	"src/github.com/DavidHernandez21/dependencyInjection/cache"
+	"src/github.com/DavidHernandez21/dependencyInjection/database"
 )
 
 type contextKeyType string

@@ -6,7 +6,7 @@ import (
 	"io"
 	"math/rand"
 	"net/http"
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/gotr/resource_pool/withouPool/model"
+	"src/github.com/DavidHernandez21/gotr/resource_pool/withouPool/model"
 	"time"
 
 	log "github.com/mgutz/logxi/v1"

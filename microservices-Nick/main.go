@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/microservices-Nick/handlers"
+	"src/github.com/DavidHernandez21/microservices-Nick/handlers"
 	"syscall"
 
 	// "github.com/nicholasjackson/env"

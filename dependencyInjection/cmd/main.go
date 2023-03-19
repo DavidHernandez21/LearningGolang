@@ -9,9 +9,9 @@ import (
 	"syscall"
 	"time"
 
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/dependencyInjection/cache"
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/dependencyInjection/database"
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/dependencyInjection/handlers"
+	"src/github.com/DavidHernandez21/dependencyInjection/cache"
+	"src/github.com/DavidHernandez21/dependencyInjection/database"
+	"src/github.com/DavidHernandez21/dependencyInjection/handlers"
 
 	"github.com/gorilla/mux"
 )

@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"time"
 
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/mongoDB/RESTfullApi/data"
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/timer"
+	"src/github.com/DavidHernandez21/mongoDB/RESTfullApi/data"
+	"src/github.com/DavidHernandez21/timer"
 
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"

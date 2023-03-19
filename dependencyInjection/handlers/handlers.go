@@ -10,9 +10,9 @@ import (
 	"net/http"
 	"time"
 
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/dependencyInjection/cache"
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/dependencyInjection/database"
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/dependencyInjection/provider"
+	"src/github.com/DavidHernandez21/dependencyInjection/cache"
+	"src/github.com/DavidHernandez21/dependencyInjection/database"
+	"src/github.com/DavidHernandez21/dependencyInjection/provider"
 
 	"github.com/gorilla/mux"
 )

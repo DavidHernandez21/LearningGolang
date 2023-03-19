@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/justForfunc/protoBuf_basics/todo"
+	"src/github.com/DavidHernandez21/justForfunc/protoBuf_basics/todo"
 
 	"google.golang.org/protobuf/proto"
 )

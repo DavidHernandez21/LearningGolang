@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/splitCsv"
+	"src/github.com/DavidHernandez21/splitCsv"
 )
 
 func ExampleSplitCsv(inputFilePath, outputDirectory, jsonKeyPath string) {

@@ -7,9 +7,9 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/mongoDB/RESTfullApi/clients"
+	"src/github.com/DavidHernandez21/mongoDB/RESTfullApi/clients"
 
-	"src/github.com/DavidHernandez21/src/github.com/DavidHernandez21/mongoDB/RESTfullApi/handlers"
+	"src/github.com/DavidHernandez21/mongoDB/RESTfullApi/handlers"
 )
 
 // var client *mongo.Client
