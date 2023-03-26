@@ -1,0 +1,26 @@
+goos: windows
+goarch: amd64
+pkg: github.com/DavidHernandez21/golang_pgo
+cpu: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
+BenchmarkLoad-8   	    5644	    250874 ns/op
+BenchmarkLoad-8   	    7562	    147171 ns/op
+BenchmarkLoad-8   	    7941	    147776 ns/op
+BenchmarkLoad-8   	    7975	    151665 ns/op
+BenchmarkLoad-8   	    7681	    184131 ns/op
+BenchmarkLoad-8   	    6927	    167372 ns/op
+BenchmarkLoad-8   	    7172	    154558 ns/op
+BenchmarkLoad-8   	    7921	    154660 ns/op
+BenchmarkLoad-8   	    7898	    175276 ns/op
+BenchmarkLoad-8   	    7383	    161779 ns/op
+BenchmarkLoad-8   	    7156	    159409 ns/op
+BenchmarkLoad-8   	    7165	    161425 ns/op
+BenchmarkLoad-8   	    6964	    175121 ns/op
+BenchmarkLoad-8   	    7167	    188822 ns/op
+BenchmarkLoad-8   	    6973	    169966 ns/op
+BenchmarkLoad-8   	    7398	    197428 ns/op
+BenchmarkLoad-8   	    5858	    230748 ns/op
+BenchmarkLoad-8   	    5535	    211903 ns/op
+BenchmarkLoad-8   	    5968	    212627 ns/op
+BenchmarkLoad-8   	    5416	    207703 ns/op
+PASS
+ok  	github.com/DavidHernandez21/golang_pgo	26.635s
