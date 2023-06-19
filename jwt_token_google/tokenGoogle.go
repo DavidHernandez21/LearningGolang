@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"time"
 
@@ -54,7 +53,7 @@ func GenerateTokenString(ctx context.Context, scope string) (string, error) {
 	// var scope string = "https://www.googleapis.com/auth/dialogflow"
 
 	// ctx := context.Background()
-	keyBytes, err := ioutil.ReadFile(*Keyfile)
+	keyBytes, err := os.ReadFile(*Keyfile)
 	if err != nil {
 		return "", fmt.Errorf("unable to read service account key file  %v", err)
 	}
@@ -114,7 +113,7 @@ func GenerateToken(ctx context.Context, scope string) (oauth2.TokenSource, error
 	// var scope string = "https://www.googleapis.com/auth/dialogflow"
 
 	// ctx := context.Background()
-	keyBytes, err := ioutil.ReadFile(*Keyfile)
+	keyBytes, err := os.ReadFile(*Keyfile)
 	if err != nil {
 		return nil, fmt.Errorf("unable to read service account key file  %v", err)
 	}
