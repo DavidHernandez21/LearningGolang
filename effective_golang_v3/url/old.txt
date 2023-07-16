@@ -1,6 +1,6 @@
 goos: windows
 goarch: amd64
-pkg: github.com/DavidHernandez21/effective_golnag_v3/url
+pkg: github.com/DavidHernandez21/effective_golang_v3/url
 cpu: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
 BenchmarkURLString
     url_test.go:106: Loop 1 times
@@ -64,4 +64,4 @@ BenchmarkURLString-8   	42477574	        31.76 ns/op	      24 B/op	       1 allo
     url_test.go:106: Loop 36983844 times
 BenchmarkURLString-8   	36983844	        31.83 ns/op	      24 B/op	       1 allocs/op
 PASS
-ok  	github.com/DavidHernandez21/effective_golnag_v3/url	12.419s
+ok  	github.com/DavidHernandez21/effective_golang_v3/url	12.419s

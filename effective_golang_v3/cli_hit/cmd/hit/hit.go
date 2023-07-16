@@ -11,7 +11,7 @@ import (
 	"os/signal"
 	"runtime"
 
-	"github.com/DavidHernandez21/effective_golnag_v3/cli_hit/hit"
+	"github.com/DavidHernandez21/effective_golang_v3/cli_hit/hit"
 )
 
 const (

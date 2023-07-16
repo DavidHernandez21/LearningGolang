@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/DavidHernandez21/effective_golnag_v3/url"
+	"github.com/DavidHernandez21/effective_golang_v3/url"
 )
 
 type flags struct {
