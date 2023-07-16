@@ -1,0 +1,17 @@
+go 1.20
+
+use (
+	.
+	./effective_golang_v3
+	./gingonic
+	./golang_aoc_memory_mindful
+	./golang_details_and_tips
+	./golang_generics_101
+	./golang_generics_unconstrained
+	./golang_http_response_controller
+	./golang_optimization_101
+	./golang_pgo
+	./golang_redis_toy_server
+	./profiling/DaveCheney
+	./rabbitmq
+)
