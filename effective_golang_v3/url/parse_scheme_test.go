@@ -3,7 +3,7 @@ package url_test
 import (
 	"testing"
 
-	"github.com/DavidHernandez21/effective_golang_v3/url"
+	"src/github.com/DavidHernandez21/effective_golang_v3/url"
 )
 
 func TestParseScheme(t *testing.T) {
