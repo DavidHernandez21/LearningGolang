@@ -49,6 +49,3 @@ floating-point value is about (or more than) 20 times slower than boxing a point
 times slower than boxing a pointer values.
 -  Boxing a struct (array) value with only one field (element) which is a small integer or a zero
 bool/numeric/string/slice/point value is as faster as boxing that field (element).
-
-
-

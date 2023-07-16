@@ -15,6 +15,6 @@ and [this](https://github.com/pardahlman/docker-rabbitmq-cluster/blob/master/hap
 
 `rabbitmqctl list_queues name messages_ready messages_unacknowledged`
 
-## erlang cookie file 
+## erlang cookie file
 [docs](https://www.rabbitmq.com/clustering.html#erlang-cookie)
  The file must be only accessible to the owner (e.g. have UNIX permissions of 600 or similar). Every cluster node must have the same cookie.

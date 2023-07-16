@@ -60,7 +60,7 @@ func (s *server) statz(w http.ResponseWriter, r *http.Request) {
 		<script>
 		setInterval(function() {
 			var imgs = document.getElementsByTagName("IMG");
-			
+
 			for (var i=0; i < imgs.length; i++) {
 				var eqPos = imgs[i].src.lastIndexOf("=");
 				console.log(eqPos);

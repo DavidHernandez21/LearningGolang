@@ -15,14 +15,14 @@ import (
 )
 
 const (
-	bannerText = ` 
+	bannerText = `
 __ __ __ ______
-/\ \_\ \ /\ \ /\__ _\ 
-\ \ __ \ \ \ \ \/_/\ \/ 
- \ \_\ \_\ \ \_\ \ \_\ 
+/\ \_\ \ /\ \ /\__ _\
+\ \ __ \ \ \ \ \/_/\ \/
+ \ \_\ \_\ \ \_\ \ \_\
  \/_/\/_/ \/_/ \/_/
 `
-	usageText = ` 
+	usageText = `
 Usage:
 	hit [options] url
 Options:`
