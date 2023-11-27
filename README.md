@@ -11,6 +11,8 @@ In this repo I will put code that I have wrote following tutorials and reading b
 - Run the linters
     + golangci-lint -v run // verbose mode
 
+**Running golanci-lint with pre-commit is f slow**
+
 ## gitleaks (maybe better using it with pre-commit)
 [docs](https://github.com/zricethezav/gitleaks)
 
