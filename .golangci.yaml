@@ -1,3 +1,6 @@
+run:
+  timeout: 5m
+
 linters:
   # Disable all linters.
   # Default: false
@@ -5,7 +8,18 @@ linters:
   # Enable specific linter
   # https://golangci-lint.run/usage/linters/#enabled-by-default-linters
   enable:
+    - staticcheck
     - prealloc
+    - contextcheck
+    - dupl
+    - exportloopref
+    - goconst
+    - gocritic
+    - gocyclo
+    - predeclared
+    - unparam
+    - usestdlibvars
+    # - wastedassign  wastedassign is disabled because of generics. You can track the evolution of the generics support by following the https://github.com/golangci/golangci-lint/issues/2649.
 
 linters-settings:
   prealloc:
