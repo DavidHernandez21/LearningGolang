@@ -21,7 +21,7 @@ func readOrders(name string) [][]string {
 
 	r := csv.NewReader(f)
 
-	r.Comma = ';'
+	r.Comma = ','
 
 	rows, err := r.ReadAll()
 
