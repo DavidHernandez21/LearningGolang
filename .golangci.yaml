@@ -19,7 +19,6 @@ linters:
     - prealloc
     - contextcheck
     - dupl
-    - exportloopref
     - goconst
     - gocritic
     - gocyclo
@@ -27,27 +26,22 @@ linters:
     - unparam
     - usestdlibvars
     - bodyclose
-    - deadcode
     - depguard
     - dogsled
     - errcheck
     - exhaustive
     - errorlint
-    - gomnd
     - gosec
-    - gosimple
     - govet
     - ineffassign
     - misspell
+    - mnd
     - nolintlint
     - nakedret
     - revive
-    - structcheck
-    - stylecheck
     - thelper
     - tparallel
     - unconvert
-    - varcheck
     - whitespace
     - wsl
     # - wastedassign  wastedassign is disabled because of generics. You can track the evolution of the generics support by following the https://github.com/golangci/golangci-lint/issues/2649.
