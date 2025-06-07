@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"src/github.com/DavidHernandez21/effective_golang_v3/url"
+	"github.com/DavidHernandez21/effective_golang_v3/url"
 )
 
 func ExampleURL() {
