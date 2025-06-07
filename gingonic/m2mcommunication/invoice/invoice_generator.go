@@ -34,11 +34,11 @@ func handleWriteStringErrorGin(err error, c *gin.Context) {
 	c.JSON(500, gin.H{"error": "Internal server error"})
 }
 
-func joinStrings(grow int, words...string) (string, error){
+func joinStrings(grow int, words ...string) (string, error) {
 	var sb strings.Builder
 	sb.Grow(grow)
 
-	for _, s := range words{
+	for _, s := range words {
 
 		_, err := sb.WriteString(s)
 
@@ -102,7 +102,6 @@ func main() {
 		c.JSON(200, iv)
 	})
 
-
 	bindAddress, err := joinStrings(90, *host, ":", *port)
 	if err != nil {
 		log.Fatalf("InvoiceGenerator: %s", err.Error())
@@ -117,6 +116,6 @@ func main() {
 		}
 	}()
 
-	servershutdown.Graceful(srv, 5*time.Second)
+	servershutdown.Graceful(&srv, 5*time.Second)
 
 }

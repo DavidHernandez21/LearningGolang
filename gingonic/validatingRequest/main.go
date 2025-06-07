@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/DavidHernandez21/gingonic/getserver"
-	servershutdown "github.com/DavidHernandez21/gingonic/serverShutdown"
+	"github.com/DavidHernandez21/gingonic/servershutdown"
 	"github.com/gin-gonic/gin"
 )
 
@@ -41,6 +41,6 @@ func main() {
 		}
 	}()
 
-	servershutdown.Graceful(srv, 5*time.Second)
+	servershutdown.Graceful(&srv, 5*time.Second)
 
 }

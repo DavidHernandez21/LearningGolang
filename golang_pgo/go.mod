@@ -1,6 +1,6 @@
 module github.com/DavidHernandez21/golang_pgo
 
-go 1.20
+go 1.24
 
 require (
 	gitlab.com/golang-commonmark/html v0.0.0-20191124015941-a22733972181 // indirect

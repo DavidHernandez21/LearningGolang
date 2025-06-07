@@ -10,12 +10,12 @@ import (
 	"time"
 )
 
-//gracefully shutdown the server. Force shutdown if the context is canceled e.g after "timeout"
-func Graceful(srv http.Server, timeout time.Duration) {
+// gracefully shutdown the server. Force shutdown if the context is canceled e.g after "timeout"
+func Graceful(srv *http.Server, timeout time.Duration) {
 
 	// Wait for interrupt signal to gracefully shutdown the server with
 	// a timeout of "timeout".
-	quit := make(chan os.Signal)
+	quit := make(chan os.Signal, 1)
 	// kill (no param) default send syscall.SIGTERM
 	// kill -2 is syscall.SIGINT
 	// kill -9 is syscall.SIGKILL but can't be caught, so don't need to add it
