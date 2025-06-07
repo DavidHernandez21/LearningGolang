@@ -46,6 +46,9 @@ linters:
     # - wastedassign  wastedassign is disabled because of generics. You can track the evolution of the generics support by following the https://github.com/golangci/golangci-lint/issues/2649.
 
   settings:
+    gosec:
+      excludes:
+        - G404 # Insecure random number source (rand). causes false positives.
     prealloc:
       # IMPORTANT: we don't recommend using this linter before doing performance profiling.
       # For most programs usage of prealloc will be a premature optimization.
@@ -78,6 +81,8 @@ linters:
         - performance
         - experimental
         - opinionated
+      disabled-checks:
+        - commentedOutCode
     govet:
       enable-all: true
     gocyclo:

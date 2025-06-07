@@ -43,6 +43,6 @@ func main() {
 		}
 	}()
 
-	servershutdown.Graceful(srv, 5*time.Second)
+	servershutdown.Graceful(&srv, 5*time.Second)
 
 }
