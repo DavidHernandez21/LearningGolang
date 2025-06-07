@@ -16,21 +16,3 @@ repos:
         rev: v2.1.6
         hooks:
             - id: golangci-lint
-              exclude: |
-                (?x)^(
-                    BuiltInFunctions/Copy\.go$|
-                    BuiltInFunctions/CopyStrings\.go$|
-                    Channels/ChannelTryRecieveSend\.go$|
-                    Channels/Channels\.go$|
-                    Channels/Channels1t1Notif\.go$|
-                    Channels/ChannelsUseCases\.go$|
-                    Interfaces/Interfaces\.go$|
-                    Interfaces/MethodSets\.go$|
-                    Interfaces/TypeAssertion\.go$|
-                    ReadWrite/CsvReadWrite\.go$|
-                    ReadWrite/ToPdf\.go$|
-                    composer/loadGCP\.go$|
-                    goroutines/GoRoutines\.go$|
-                    goroutines/patterns\.go$|
-                    json/httpJson\.go$
-                )$
