@@ -1,6 +1,6 @@
 module github.com/DavidHernandez21/golang_argocd
 
-go 1.24
+go 1.25
 
 replace k8s.io/api => k8s.io/api v0.24.16
 

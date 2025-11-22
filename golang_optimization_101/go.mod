@@ -1,3 +1,3 @@
 module github.com/DavidHernandez21/golang_optimization_101
 
-go 1.24
+go 1.25
